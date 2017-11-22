@@ -1,0 +1,2 @@
+# GANLab
+assignment of AICourse
