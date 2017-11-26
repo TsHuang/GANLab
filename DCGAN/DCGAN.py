@@ -11,12 +11,39 @@ import torch.utils.data
 import torchvision.datasets as dset
 import torchvision.transforms as transforms
 import torchvision.utils as vutils
+import h5py
+import numpy as np
 from torch.autograd import Variable
 
 
+class CelebADataset(object):
+    def __init__(self, h5_path, transform=None):
+        assert (os.path.isfile(h5_path))
+        self.h5_path = h5_path
+        self.transform = transform
+
+        # loading the dataset into memory
+        f = h5py.File(self.h5_path, "r")
+        key = list(f.keys())
+        print("key list:", key)
+        self.dataset = f[key[0]]
+        print("dataset loaded and its shape:", self.dataset.shape)
+
+    def __getitem__(self, index):
+        img = self.dataset[index]
+        img = np.transpose(img, (1, 2, 0))
+        if self.transform is not None:
+            img = self.transform(img)
+
+        return img, 0
+
+    def __len__(self):
+        return len(self.dataset)
+
+
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', required=True, help='cifar10 | lsun | imagenet | folder | lfw | fake')
-parser.add_argument('--dataroot', required=True, help='path to dataset')
+#parser.add_argument('--dataset', required=True, help='cifar10 | lsun | imagenet | folder | lfw | fake')
+#parser.add_argument('--dataroot', required=True, help='path to dataset')
 parser.add_argument('--workers', type=int, help='number of data loading workers', default=2)
 parser.add_argument('--batchSize', type=int, default=64, help='input batch size')
 parser.add_argument('--imageSize', type=int, default=64, help='the height / width of the input image to network')
@@ -54,36 +81,40 @@ cudnn.benchmark = True
 if torch.cuda.is_available() and not opt.cuda:
     print("WARNING: You have a CUDA device, so you should probably run with --cuda")
 
-if opt.dataset in ['imagenet', 'folder', 'lfw']:
-    # folder dataset
-    dataset = dset.ImageFolder(root=opt.dataroot,
-                               transform=transforms.Compose([
-                                   transforms.Scale(opt.imageSize),
-                                   transforms.CenterCrop(opt.imageSize),
-                                   transforms.ToTensor(),
-                                   transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-                               ]))
-elif opt.dataset == 'lsun':
-    dataset = dset.LSUN(db_path=opt.dataroot, classes=['bedroom_train'],
-                        transform=transforms.Compose([
-                            transforms.Scale(opt.imageSize),
-                            transforms.CenterCrop(opt.imageSize),
-                            transforms.ToTensor(),
-                            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-                        ]))
-elif opt.dataset == 'cifar10':
-    dataset = dset.CIFAR10(root=opt.dataroot, download=True,
-                           transform=transforms.Compose([
-                               transforms.Scale(opt.imageSize),
-                               transforms.ToTensor(),
-                               transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-                           ]))
-elif opt.dataset == 'fake':
-    dataset = dset.FakeData(image_size=(3, opt.imageSize, opt.imageSize),
-                            transform=transforms.ToTensor())
-assert dataset
-dataloader = torch.utils.data.DataLoader(dataset, batch_size=opt.batchSize,
-                                         shuffle=True, num_workers=int(opt.workers))
+# if opt.dataset in ['imagenet', 'folder', 'lfw']:
+#     # folder dataset
+#     dataset = dset.ImageFolder(root=opt.dataroot,
+#                                transform=transforms.Compose([
+#                                    transforms.Scale(opt.imageSize),
+#                                    transforms.CenterCrop(opt.imageSize),
+#                                    transforms.ToTensor(),
+#                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+#                                ]))
+# elif opt.dataset == 'lsun':
+#     dataset = dset.LSUN(db_path=opt.dataroot, classes=['bedroom_train'],
+#                         transform=transforms.Compose([
+#                             transforms.Scale(opt.imageSize),
+#                             transforms.CenterCrop(opt.imageSize),
+#                             transforms.ToTensor(),
+#                             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+#                         ]))
+# elif opt.dataset == 'cifar10':
+#     dataset = dset.CIFAR10(root=opt.dataroot, download=True,
+#                            transform=transforms.Compose([
+#                                transforms.Scale(opt.imageSize),
+#                                transforms.ToTensor(),
+#                                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+#                            ]))
+# elif opt.dataset == 'fake':
+#     dataset = dset.FakeData(image_size=(3, opt.imageSize, opt.imageSize),
+#                             transform=transforms.ToTensor())
+# assert dataset
+# dataloader = torch.utils.data.DataLoader(dataset, batch_size=opt.batchSize, shuffle=True, num_workers=int(opt.workers))
+
+batch_size = 64
+T = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)), ])
+dataloader = torch.utils.data.DataLoader(CelebADataset('../CelebA_aligned.h5', transform=T), batch_size=batch_size,
+                                         shuffle=True, num_workers=1)
 
 ngpu = int(opt.ngpu)
 nz = int(opt.nz)
@@ -108,7 +139,7 @@ class _netG(nn.Module):
         self.ngpu = ngpu
         self.main = nn.Sequential(
             # input is Z, going into a convolution
-            nn.ConvTranspose2d(     nz, ngf * 8, 4, 1, 0, bias=False),
+            nn.ConvTranspose2d(nz, ngf * 8, 4, 1, 0, bias=False),
             nn.BatchNorm2d(ngf * 8),
             nn.ReLU(True),
             # state size. (ngf*8) x 4 x 4
@@ -120,11 +151,11 @@ class _netG(nn.Module):
             nn.BatchNorm2d(ngf * 2),
             nn.ReLU(True),
             # state size. (ngf*2) x 16 x 16
-            nn.ConvTranspose2d(ngf * 2,     ngf, 4, 2, 1, bias=False),
+            nn.ConvTranspose2d(ngf * 2, ngf, 4, 2, 1, bias=False),
             nn.BatchNorm2d(ngf),
             nn.ReLU(True),
             # state size. (ngf) x 32 x 32
-            nn.ConvTranspose2d(    ngf,      nc, 4, 2, 1, bias=False),
+            nn.ConvTranspose2d(ngf, nc, 4, 2, 1, bias=False),
             nn.Tanh()
             # state size. (nc) x 64 x 64
         )
@@ -255,12 +286,12 @@ for epoch in range(opt.niter):
                  errD.data[0], errG.data[0], D_x, D_G_z1, D_G_z2))
         if i % 100 == 0:
             vutils.save_image(real_cpu,
-                    '%s/real_samples.png' % opt.outf,
-                    normalize=True)
+                              '%s/real_samples.png' % opt.outf,
+                              normalize=True)
             fake = netG(fixed_noise)
             vutils.save_image(fake.data,
-                    '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
-                    normalize=True)
+                              '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
+                              normalize=True)
 
     # do checkpointing
     torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (opt.outf, epoch))
