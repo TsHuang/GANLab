@@ -10,13 +10,13 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.45748186">
+    <splitter split-orientation="horizontal" split-proportion="0.6943042">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="BVAE.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/../VAE/BVAE.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="457">
+                <state relative-caret-position="-417">
                   <caret line="89" column="12" lean-forward="false" selection-start-line="89" selection-start-column="12" selection-end-line="89" selection-end-column="12" />
                   <folding>
                     <element signature="e#0#37#0" expanded="true" />
@@ -28,8 +28,8 @@
           <file leaf-file-name="VAEGAN.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/../VAE_GAN/VAEGAN.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="229">
-                  <caret line="379" column="37" lean-forward="true" selection-start-line="379" selection-start-column="37" selection-end-line="379" selection-end-column="37" />
+                <state relative-caret-position="343">
+                  <caret line="347" column="1" lean-forward="false" selection-start-line="347" selection-start-column="1" selection-end-line="347" selection-end-column="1" />
                   <folding>
                     <element signature="e#0#37#0" expanded="true" />
                   </folding>
@@ -41,23 +41,21 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="VAEGAN_Example.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/../VAE_GAN/VAEGAN_Example.py">
+          <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/../../../labResNet/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="903">
-                  <caret line="302" column="33" lean-forward="false" selection-start-line="302" selection-start-column="14" selection-end-line="302" selection-end-column="33" />
-                  <folding>
-                    <element signature="e#0#37#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="240">
+                  <caret line="38" column="86" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="86" />
+                  <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="DCGAN.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="DCGAN.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/DCGAN.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1703">
-                  <caret line="298" column="0" lean-forward="false" selection-start-line="298" selection-start-column="0" selection-end-line="298" selection-end-column="0" />
+                <state relative-caret-position="2457">
+                  <caret line="160" column="9" lean-forward="true" selection-start-line="160" selection-start-column="9" selection-end-line="160" selection-end-column="9" />
                   <folding>
                     <element signature="e#0#37#0" expanded="true" />
                   </folding>
@@ -80,6 +78,8 @@
     <findStrings>
       <find>outf</find>
       <find>criteri</find>
+      <find>beta1</find>
+      <find>report</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -94,7 +94,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2" />
+    <option name="x" value="-3" />
     <option name="y" value="33" />
     <option name="width" value="1600" />
     <option name="height" value="821" />
@@ -138,7 +138,8 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../VAE_GAN" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../labResNet/main.py" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -166,10 +167,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2" y="33" width="1600" height="821" extended-state="0" />
+    <frame x="-3" y="33" width="1600" height="821" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.021290323" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10516129" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20194986" sideWeight="0.5077419" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -284,18 +285,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../VAE/BVAE.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
+        <state relative-caret-position="-417">
           <caret line="89" column="12" lean-forward="false" selection-start-line="89" selection-start-column="12" selection-end-line="89" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DCGAN.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1703">
-          <caret line="298" column="0" lean-forward="false" selection-start-line="298" selection-start-column="0" selection-end-line="298" selection-end-column="0" />
           <folding>
             <element signature="e#0#37#0" expanded="true" />
           </folding>
@@ -307,6 +298,24 @@
         <state relative-caret-position="903">
           <caret line="302" column="33" lean-forward="false" selection-start-line="302" selection-start-column="14" selection-end-line="302" selection-end-column="33" />
           <folding>
+            <element signature="e#0#37#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../labResNet/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="38" column="86" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="86" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DCGAN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2457">
+          <caret line="160" column="9" lean-forward="true" selection-start-line="160" selection-start-column="9" selection-end-line="160" selection-end-column="9" />
+          <folding>
             <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
@@ -314,8 +323,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../VAE_GAN/VAEGAN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="379" column="37" lean-forward="true" selection-start-line="379" selection-start-column="37" selection-end-line="379" selection-end-column="37" />
+        <state relative-caret-position="343">
+          <caret line="347" column="1" lean-forward="false" selection-start-line="347" selection-start-column="1" selection-end-line="347" selection-end-column="1" />
           <folding>
             <element signature="e#0#37#0" expanded="true" />
           </folding>
