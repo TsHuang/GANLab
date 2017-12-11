@@ -116,8 +116,13 @@ def train(epoch):
                 100. * batch_idx / len(train_loader),
                 loss.data[0] / len(data)))
 
+        Traindata = np.array([epoch, i, errD.data[0], errG.data[0], D_x, D_G_z1, D_G_z2])
+        report = np.vstack((report, newdata))
+
     print('====> Epoch: {} Average loss: {:.4f}'.format(
           epoch, train_loss / len(train_loader.dataset)))
+
+
 
 
 def test(epoch):

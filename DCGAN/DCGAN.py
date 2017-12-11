@@ -68,6 +68,11 @@ try:
 except OSError:
     pass
 
+# save training loss
+curve_file = opt.outf + '/curveData.csv'
+report = np.array(['Epoch', 'dataIdx', 'Loss_D', 'Loss_G', 'D(x)', 'D(G(z1))', 'D(G(z2))'])
+
+
 if opt.manualSeed is None:
     opt.manualSeed = random.randint(1, 10000)
 print("Random Seed: ", opt.manualSeed)
@@ -139,11 +144,11 @@ class _netG(nn.Module):
         self.ngpu = ngpu
         self.main = nn.Sequential(
             # input is Z, going into a convolution
-            nn.ConvTranspose2d(nz, ngf * 8, 4, 1, 0, bias=False),
+            nn.ConvTranspose2d(nz, ngf * 8, 4, 1, 0, bias=False), #(in_channel, out_channel, kernalsize, stride, padding)
             nn.BatchNorm2d(ngf * 8),
             nn.ReLU(True),
             # state size. (ngf*8) x 4 x 4
-            nn.ConvTranspose2d(ngf * 8, ngf * 4, 4, 2, 1, bias=False),
+            nn.ConvTranspose2d(ngf * 8, ngf * 4, 4, 2, 1, bias=False), #stride =2, so output kernal size would be 4x2 =8
             nn.BatchNorm2d(ngf * 4),
             nn.ReLU(True),
             # state size. (ngf*4) x 8 x 8
@@ -284,6 +289,10 @@ for epoch in range(opt.niter):
         print('[%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f / %.4f'
               % (epoch, opt.niter, i, len(dataloader),
                  errD.data[0], errG.data[0], D_x, D_G_z1, D_G_z2))
+
+        newdata = np.array([epoch, i, errD.data[0], errG.data[0], D_x, D_G_z1, D_G_z2])
+        report = np.vstack((report, newdata))
+
         if i % 100 == 0:
             vutils.save_image(real_cpu,
                               '%s/real_samples.png' % opt.outf,
@@ -296,3 +305,6 @@ for epoch in range(opt.niter):
     # do checkpointing
     torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (opt.outf, epoch))
     torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (opt.outf, epoch))
+
+#save curve data
+np.savetxt(curve_file, report, fmt="%s", delimiter=",")
