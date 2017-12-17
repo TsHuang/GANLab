@@ -52,15 +52,15 @@ parser.add_argument('--imageSize', type=int, default=64, help='the height / widt
 parser.add_argument('--nz', type=int, default=2048, help='size of the latent z vector')
 parser.add_argument('--ngf', type=int, default=64)
 parser.add_argument('--ndf', type=int, default=32)
-parser.add_argument('--niter', type=int, default=2, help='number of epochs to train for')
+parser.add_argument('--niter', type=int, default=50, help='number of epochs to train for')
 parser.add_argument('--saveInt', type=int, default=1, help='number of epochs between checkpoints')
-parser.add_argument('--lr', type=float, default=0.0003, help='learning rate, default=0.0002')
+parser.add_argument('--lr', type=float, default=0.0003, help='learning rate, default=0.0003')
 parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam. default=0.5')
 parser.add_argument('--cuda', action='store_true', help='enables cuda')
 parser.add_argument('--ngpu', type=int, default=1, help='number of GPUs to use')
 parser.add_argument('--netG', default='', help="path to netG (to continue training)")
 parser.add_argument('--netD', default='', help="path to netD (to continue training)")
-parser.add_argument('--outf', default='./results1217', help='folder to output images and model checkpoints')
+parser.add_argument('--outf', default='./results1218', help='folder to output images and model checkpoints')
 parser.add_argument('--manualSeed', type=int, help='manual seed')
 
 opt = parser.parse_args()
@@ -73,7 +73,7 @@ except OSError:
 
 # save training loss
 curve_file = opt.outf + '/curveData.csv'
-report = np.array(['Epoch', 'dataIdx', 'Loss_VAE', 'Loss_D', 'Loss_G', 'D(x)', 'D(G(z))'])
+report = np.array(['Epoch', 'dataIdx', 'Loss_VAE', 'Loss_D', 'Loss_G', 'D(x)', 'D(G(z))_up', 'D(G(z))_down'])
 
 if opt.manualSeed is None:
     opt.manualSeed = random.randint(1, 10000)
@@ -178,7 +178,7 @@ class _Encoder(nn.Module):
         self.relu = nn.ReLU(True)
         self.log_var = nn.Linear(nz, nz)
 
-    def foward(self, input):
+    def forward(self, input):
         x = self.conv3(self.conv2(self.conv1(input)))
 
         x = x.view(-1, ngf * 4 * 8 * 8)
@@ -416,6 +416,7 @@ for epoch in range(opt.niter):
 
         newdata = np.array(
             [epoch, i, VAEerr.data[0], errD.data[0], errD.data[0], D_x, D_G_z1 + D_G_z11, D_G_z2 + D_G_z22])
+
         report = np.vstack((report, newdata))
 
         if i % 100 == 0:
